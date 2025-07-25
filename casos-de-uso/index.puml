@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+actor Cliente as C
+actor "Sistemas Externos" as SE
+
+rectangle "Sistema Bancário VittalNext" {
+  (UC01: Realizar Login) as UC01
+  (UC02: Registrar Dispositivo) as UC02
+  (UC03: Contratar Empréstimo) as UC03
+  (UC04: Solicitar Cartão) as UC04
+  (UC05: Receber Notificação) as UC05
+  (UC06: Interagir com Chatbot) as UC06
+  (UC07: Definir Meta) as UC07
+  (UC08: Gerar Relatório) as UC08
+  (UC09: Realizar PIX) as UC09
+  (UC10: Agendar Pagamento) as UC10
+  (UC11: Encerrar Conta) as UC11
+  (UC12: Atualizar Dados) as UC12
+}
+
+C --> UC01
+C --> UC02
+C --> UC03
+C --> UC04
+C --> UC06
+C --> UC07
+C --> UC08
+C --> UC09
+C --> UC10
+C --> UC11
+C --> UC12
+
+UC05 --> C : Notificação
+UC03 --> SE : Consulta Serasa
+UC09 --> SE : Integração PIX
+UC04 --> SE : Análise de Crédito
+
+' Relações entre casos de uso
+UC01 .> UC02 : Pré-requisito
+' UC01 .> UC07 : Pré-requisito
+UC08 .> UC07 : Dependência
+@enduml
