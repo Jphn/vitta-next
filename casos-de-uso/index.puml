@@ -1,43 +1,119 @@
 @startuml
-left to right direction
-skinparam actorStyle awesome
-actor Cliente as C
-actor "Sistemas Externos" as SE
+title Diagrama de Casos de Uso - Projeto VittaNext
 
-rectangle "Sistema Bancário VittalNext" {
-  (UC01: Realizar Login) as UC01
-  (UC02: Registrar Dispositivo) as UC02
-  (UC03: Contratar Empréstimo) as UC03
-  (UC04: Solicitar Cartão) as UC04
-  (UC05: Receber Notificação) as UC05
-  (UC06: Interagir com Chatbot) as UC06
-  (UC07: Definir Meta) as UC07
-  (UC08: Gerar Relatório) as UC08
-  (UC09: Realizar PIX) as UC09
-  (UC10: Agendar Pagamento) as UC10
-  (UC11: Encerrar Conta) as UC11
-  (UC12: Atualizar Dados) as UC12
+left to right direction
+skinparam packageStyle rectangle
+
+actor Cliente
+actor Atendente as "Banco (Atendente)"
+actor Administrador
+actor Serasa as "Serasa/SPC"
+actor PIX
+actor BACEN
+
+package "Autenticação e Segurança" {
+  usecase "Login" as UC_Login
+  usecase "Autenticação 2FA" as UC_2FA
+  usecase "Manter Dispositivo Confiável" as UC_RegDisp
+
+
+  ' ' Alertas de segurança
+  ' usecase "Gerar Alerta de Login" as UC_AlertLogin
+  ' UC_Login .> UC_AlertLogin : <<extend>>
+  ' note right of UC_AlertLogin
+  '   Regra: A cada tentativa de login malsucedida, gerar alerta
+  ' end note
+  ' actor Sistema as "Monitor de Segurança"
+  ' Sistema --> UC_AlertLogin
+
+  Cliente --> UC_Login
+  UC_Login <. UC_2FA : <<extend>>
+  Cliente --> UC_RegDisp
+
+  note right of UC_RegDisp
+    Regra: Cliente pode cadastrar até 5 dispositivos confiáveis
+  end note
 }
 
-C --> UC01
-C --> UC02
-C --> UC03
-C --> UC04
-C --> UC06
-C --> UC07
-C --> UC08
-C --> UC09
-C --> UC10
-C --> UC11
-C --> UC12
+package "Gerenciamento de Conta" {
+  usecase "Abrir Conta" as UC_Abrir
+  usecase "Encerrar Conta" as UC_Encerrar
+  Cliente --> UC_Abrir
+  Cliente --> UC_Encerrar
 
-UC05 --> C : Notificação
-UC03 --> SE : Consulta Serasa
-UC09 --> SE : Integração PIX
-UC04 --> SE : Análise de Crédito
+  note right of UC_Encerrar
+    Regra: Encerrar sem pendências e sem comparecimento físico
+  end note
+}
 
-' Relações entre casos de uso
-UC01 .> UC02 : Pré-requisito
-' UC01 .> UC07 : Pré-requisito
-UC08 .> UC07 : Dependência
+package "Operações Financeiras" {
+  usecase "Visualizar Saldo" as UC_Saldo
+  usecase "Realizar Transferência (PIX)" as UC_Pix
+  usecase "Pagar Contas" as UC_Pagar
+  usecase "Saque/Depósito" as UC_Caixa
+  Cliente --> UC_Saldo
+  Cliente --> UC_Pix
+  Cliente --> UC_Pagar
+  Cliente --> UC_Caixa
+
+  PIX <-- UC_Pix
+  BACEN <-- UC_Caixa
+
+  note right of UC_Caixa
+    Limite Diário de Saque: R$2.000 (exceções pré-aprovadas)
+  end note
+}
+
+package "Módulo de Compra" {
+  usecase "Solicitar Empréstimo" as UC_Emprestimo
+  usecase "Solicitar Cartão" as UC_Cartao
+  usecase "Adquirir Seguro" as UC_Seguro
+  usecase "Contratar Pacote de Serviços" as UC_Pacote
+  usecase "Consultar Histórico de Compras" as UC_HistComp
+  usecase "Consultar Histórico de Cancelamentos" as UC_HistCanc
+
+  Cliente --> UC_Emprestimo
+  Cliente --> UC_Cartao
+  Cliente --> UC_Seguro
+  Cliente --> UC_Pacote
+  Cliente --> UC_HistComp
+
+  Serasa <-- UC_Emprestimo
+
+  note right of UC_Emprestimo
+    [Movimentação > R$5.000] registrar para compliance interno
+  end note
+  note right of UC_Emprestimo
+    Regra: Só contratar se sem restrição interna/externa
+  end note
+  note right of UC_Cartao
+    Cartões virtuais válidos por até 12 meses, exclusão a qualquer momento
+  end note
+}
+
+package "Módulo de Comunicação" {
+  usecase "Receber Notificações" as UC_Notif
+  usecase "Notificar via Push" as UC_Push
+  usecase "Notificar via SMS" as UC_SMS
+  usecase "Notificar via E-mail" as UC_Email
+  usecase "Interagir com Chatbot" as UC_Chatbot
+  usecase "Ver Histórico de Suporte" as UC_HistAtend
+  usecase "Enviar Documentos" as UC_EnvDoc
+  usecase "Aderir ao Canal de WhatsApp" as UC_Zap
+
+  Cliente --> UC_Notif
+  UC_Notif ..> UC_Push : <<extend>>
+  UC_Notif ..> UC_SMS  : <<extend>>
+  UC_Notif ..> UC_Email: <<extend>>
+  Cliente --> UC_Chatbot
+  Cliente --> UC_Zap
+  Cliente --> UC_HistAtend
+  Cliente --> UC_EnvDoc
+  Atendente --> UC_HistAtend
+
+  note right of UC_HistAtend
+    Regra: Registrar toda comunicação e manter por 5 anos
+  end note
+}
+
 @enduml
