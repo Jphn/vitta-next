@@ -1,118 +1,91 @@
 @startuml
-title Diagrama de Casos de Uso - Projeto VittaNext
-
 left to right direction
 skinparam packageStyle rectangle
 
 actor Cliente
-actor Atendente as "Banco (Atendente)"
-actor Administrador
-actor Serasa as "Serasa/SPC"
-actor PIX
-actor BACEN
+actor Atendente
 
-package "Autenticação e Segurança" {
-  usecase "Login" as UC_Login
-  usecase "Autenticação 2FA" as UC_2FA
-  usecase "Manter Dispositivo Confiável" as UC_RegDisp
-
-
-  ' ' Alertas de segurança
-  ' usecase "Gerar Alerta de Login" as UC_AlertLogin
-  ' UC_Login .> UC_AlertLogin : <<extend>>
-  ' note right of UC_AlertLogin
-  '   Regra: A cada tentativa de login malsucedida, gerar alerta
-  ' end note
-  ' actor Sistema as "Monitor de Segurança"
-  ' Sistema --> UC_AlertLogin
-
-  Cliente --> UC_Login
-  UC_Login <. UC_2FA : <<extend>>
-  Cliente --> UC_RegDisp
-
-  note right of UC_RegDisp
-    Regra: Cliente pode cadastrar até 5 dispositivos confiáveis
-  end note
-}
-
-package "Gerenciamento de Conta" {
-  usecase "Abrir Conta" as UC_Abrir
-  usecase "Encerrar Conta" as UC_Encerrar
-  Cliente --> UC_Abrir
-  Cliente --> UC_Encerrar
-
-  note right of UC_Encerrar
-    Regra: Encerrar sem pendências e sem comparecimento físico
-  end note
-}
-
-package "Operações Financeiras" {
-  usecase "Visualizar Saldo" as UC_Saldo
-  usecase "Realizar Transferência (PIX)" as UC_Pix
-  usecase "Pagar Contas" as UC_Pagar
-  usecase "Saque/Depósito" as UC_Caixa
-  Cliente --> UC_Saldo
-  Cliente --> UC_Pix
-  Cliente --> UC_Pagar
-  Cliente --> UC_Caixa
-
-  PIX <-- UC_Pix
-  BACEN <-- UC_Caixa
-
-  note right of UC_Caixa
-    Limite Diário de Saque: R$2.000 (exceções pré-aprovadas)
-  end note
-}
-
+' Pacote: Módulo de Compra
 package "Módulo de Compra" {
-  usecase "Solicitar Empréstimo" as UC_Emprestimo
-  usecase "Solicitar Cartão" as UC_Cartao
-  usecase "Adquirir Seguro" as UC_Seguro
-  usecase "Contratar Pacote de Serviços" as UC_Pacote
-  usecase "Consultar Histórico de Compras" as UC_HistComp
-  usecase "Consultar Histórico de Cancelamentos" as UC_HistCanc
+  usecase "Contratar Empréstimo"             as UC_Emprestimo
+  usecase "Solicitar Cartão"                  as UC_Cartao
+  usecase "Contratar Seguro"                  as UC_Seguro
+  usecase "Contratar Pacote"                  as UC_Pacote
+  usecase "Visualizar Histórico de Compras"    as UC_HistCompras
+  usecase "Pagar via PIX"                     as UC_PIX
 
   Cliente --> UC_Emprestimo
   Cliente --> UC_Cartao
   Cliente --> UC_Seguro
   Cliente --> UC_Pacote
-  Cliente --> UC_HistComp
+  Cliente --> UC_HistCompras
+  Cliente --> UC_PIX
 
-  Serasa <-- UC_Emprestimo
+  UC_Emprestimo .[#green].> Serasa          : <<include>>
+  UC_Emprestimo .[#green].> Bacen           : <<include>>
+  note right of UC_Emprestimo
+    Regras de Negócio:
+    - Cliente sem restrições SPC/Serasa
+    - Consulta obrigatória ao BACEN
+  end note
 
-  note right of UC_Emprestimo
-    [Movimentação > R$5.000] registrar para compliance interno
-  end note
-  note right of UC_Emprestimo
-    Regra: Só contratar se sem restrição interna/externa
-  end note
-  note right of UC_Cartao
-    Cartões virtuais válidos por até 12 meses, exclusão a qualquer momento
+  UC_PIX .[#purple].> Bacen                   : <<include>>
+  note right of UC_PIX
+    Integração via API PIX do BACEN
   end note
 }
 
-package "Módulo de Comunicação" {
-  usecase "Receber Notificações" as UC_Notif
-  usecase "Notificar via Push" as UC_Push
-  usecase "Notificar via SMS" as UC_SMS
-  usecase "Notificar via E-mail" as UC_Email
-  usecase "Interagir com Chatbot" as UC_Chatbot
-  usecase "Ver Histórico de Suporte" as UC_HistAtend
-  usecase "Enviar Documentos" as UC_EnvDoc
-  usecase "Aderir ao Canal de WhatsApp" as UC_Zap
+' Pacote: Autenticação e Segurança
+package "Autenticação e Segurança" {
+  usecase "Login"                           as UC_Login
+  usecase "Autenticação 2FA"               as UC_2FA
+  usecase "Registrar Tentativa de Acesso"   as UC_RegistroAcesso
 
-  Cliente --> UC_Notif
-  UC_Notif ..> UC_Push : <<extend>>
-  UC_Notif ..> UC_SMS  : <<extend>>
-  UC_Notif ..> UC_Email: <<extend>>
+  Cliente --> UC_Login
+  UC_Login .[#blue].> UC_2FA                 : <<include>>
+  UC_Login .[#red].> UC_RegistroAcesso       : <<extend>>
+  note right of UC_RegistroAcesso
+    Regra de Negócio: Alerta em tentativas
+    de acesso mal-sucedidas
+  end note
+}
+
+' Pacote: Módulo de Comunicação
+package "Módulo de Comunicação" {
+  usecase "Enviar Notificação"              as UC_Notif
+  usecase "Notificação Push"                as UC_Push
+  usecase "Notificação SMS"                 as UC_SMS
+  usecase "Notificação E-mail"              as UC_Email
+  usecase "Chatbot"                         as UC_Chatbot
+  usecase "WhatsApp Business"               as UC_Zap
+  usecase "Histórico de Atendimento"        as UC_HistAtend
+  usecase "Enviar Documento"                as UC_EnvDoc
+
   Cliente --> UC_Chatbot
   Cliente --> UC_Zap
   Cliente --> UC_HistAtend
   Cliente --> UC_EnvDoc
-  Atendente --> UC_HistAtend
 
-  note right of UC_HistAtend
-    Regra: Registrar toda comunicação e manter por 5 anos
+  UC_Notif ..> UC_Push                       : <<extend>>
+  UC_Notif ..> UC_SMS                        : <<extend>>
+  UC_Notif ..> UC_Email                      : <<extend>>
+
+  Atendente --> UC_HistAtend
+}
+
+' Pacote: Gestão Financeira Pessoal
+package "Gestão Financeira Pessoal" {
+  usecase "Visualizar Relatório de Gastos"   as UC_RelGastos
+  usecase "Definir Orçamento Mensal"         as UC_OrcMensal
+  usecase "Receber Sugestões de Gastos"      as UC_Sugestao
+
+  Cliente --> UC_RelGastos
+  Cliente --> UC_OrcMensal
+  Cliente --> UC_Sugestao
+
+  note right of UC_Sugestao
+    Regra de Negócio: Sugestões baseadas
+    no perfil de consumo do cliente
   end note
 }
 
