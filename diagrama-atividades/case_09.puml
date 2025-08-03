@@ -1,0 +1,11 @@
+@startuml case09
+start
+:Cliente seleciona "Pagar Contas";
+:Ler código de barras;
+:Recupera dados do boleto;
+:Exibe detalhes ao cliente;
+:Cliente confirma e autentica via 2FA;
+:Debita valor e gera comprovante;
+:Exibe comprovante;
+stop
+@enduml

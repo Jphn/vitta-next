@@ -1,0 +1,13 @@
+@startuml case19
+start
+:Cliente abre Chatbot;
+:Cliente envia mensagem/pergunta;
+:Processa via NLP;
+if (Resposta disponível?) then (sim)
+  :Retorna resposta ao cliente;
+  stop
+else (não)
+  :Encaminha para atendente;
+  stop
+endif
+@enduml

@@ -1,0 +1,9 @@
+@startuml case13
+start
+:Cliente seleciona "Pacotes de Serviços";
+:Cliente escolhe pacote desejado;
+:Exibe condições e periodicidade;
+:Cliente confirma contratação;
+:Ativa serviço e agenda cobranças;
+stop
+@enduml

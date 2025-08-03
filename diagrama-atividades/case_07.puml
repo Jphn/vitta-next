@@ -1,0 +1,16 @@
+@startuml case07
+start
+:Cliente seleciona "Saque/Depósito";
+:Cliente escolhe tipo e informa valor;
+:Verifica limite diário (R$2.000);
+if (Dentro do limite?) then (sim)
+  :Solicita confirmação 2FA;
+  :Cliente confirma operação;
+  :Executa transação;
+  :Exibe comprovante;
+  stop
+else (não)
+  :Informa bloqueio e sugere exceção pré-aprovada;
+  stop
+endif
+@enduml

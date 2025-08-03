@@ -1,0 +1,16 @@
+@startuml case08
+start
+:Cliente seleciona "PIX" > "Nova Transferência";
+:Cliente informa chave e valor;
+:Verifica perfil e limites;
+if (Limites ok?) then (sim)
+  :Solicita confirmação 2FA;
+  :Cliente confirma operação;
+  :Envia instrução ao PSP PIX;
+  :Exibe comprovante;
+  stop
+else (não)
+  :Informa bloqueio;
+  stop
+endif
+@enduml

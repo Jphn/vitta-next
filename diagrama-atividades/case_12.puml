@@ -1,0 +1,9 @@
+@startuml case12
+start
+:Cliente seleciona "Adquirir Seguro";
+:Cliente escolhe produto e cobertura;
+:Calcula prêmio e condições;
+:Cliente confirma e assina digitalmente;
+:Emite apólice e envia por e-mail;
+stop
+@enduml
