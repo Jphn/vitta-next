@@ -1,0 +1,197 @@
+@startuml Diagrama de Objetos
+title Diagrama de Objetos
+' Pacote: Cliente João
+package "Cliente João" {
+
+  object clienteJoao {
+    nome = "João da Silva"
+    cpf = "123.456.789-00"
+  }
+
+  object contaJoao {
+    numero = "000123-4"
+    saldo = 2500.00
+  }
+
+  object pixJoao_001 {
+    valor = 200.00
+    status = "Concluído"
+  }
+
+  object cartaoVirtualJoao {
+    numero = "**** 1234"
+    validade = "12/2026"
+    tipo = "Virtual"
+  }
+
+  object emprestimoJoao_001 {
+    valor = 1000.00
+    prazo = 12
+    status = "Aprovado"
+  }
+
+  object notificacaoSMSJoao {
+    tipo = "SMS"
+    mensagem = "Empréstimo aprovado"
+  }
+
+  object loginJoao {
+    sucesso = true
+    data = "2025-08-03"
+  }
+
+  object historicoAtendimentoJoao {
+    ultimoAtendimento = "Chatbot"
+  }
+
+  object relatorioGastosJoao {
+    total = 1200.00
+    mes = "Julho/2025"
+  }
+
+  object historicoCancelamentosJoao {
+    total = 2
+    ultimo = "Boleto cancelado"
+  }
+
+  note top of clienteJoao
+    Instância concreta da classe Cliente representando João
+  end note
+
+}
+
+
+
+' Pacote: Cliente Maria
+
+package "Cliente Maria" {
+
+  object clienteMaria {
+    nome = "Maria Oliveira"
+    cpf = "987.654.321-00"
+  }
+
+  object contaMaria {
+    numero = "000987-6"
+    saldo = 5000.00
+  }
+
+  object pagamentoBoletoMaria_001 {
+    valor = 150.00
+    status = "Pago"
+  }
+
+  object cartaoFisicoMaria {
+    numero = "**** 5678"
+    validade = "08/2028"
+    tipo = "Físico"
+  }
+
+  object seguroMaria {
+    tipo = "Vida"
+    premio = 25.00
+    status = "Ativo"
+  }
+
+  object notificacaoPushMaria {
+    tipo = "Push"
+    mensagem = "Pagamento confirmado"
+  }
+
+  object loginMaria {
+    sucesso = true
+    data = "2025-08-03"
+  }
+
+  object tentativaInvalidaMaria {
+    sucesso = false
+    data = "2025-08-03"
+  }
+
+  object chatbotMaria {
+    ultimaPergunta = "Limite do cartão?"
+    resposta = "Seu limite é R$ 3.000"
+  }
+
+  object orcamentoMensalMaria {
+    limite = 3000.00
+    gastoAtual = 1500.00
+  }
+
+  object pacoteServicosMaria {
+    nome = "Pacote Plus"
+    status = "Ativo"
+  }
+
+  note top of clienteMaria
+    Instância concreta da classe Cliente representando Maria
+  end note
+
+}
+
+
+' Pacote: Sistema e APIs Externas
+package "APIs e Sistema" {
+
+  object bacen {
+    sistema = "BACEN API"
+  }
+
+  object serasa {
+    sistema = "Serasa Consulta"
+  }
+
+  object comprovantePixJoao {
+    numero = "CMP-001"
+    tipo = "PIX"
+  }
+
+  object comprovanteBoletoMaria {
+    numero = "CMP-002"
+    tipo = "Boleto"
+  }
+
+  object whatsappBusiness {
+    status = "Ativo"
+  }
+
+  object chatbot {
+    motorNLP = "v2.3"
+  }
+
+}
+
+
+' Relacionamentos Cliente João
+
+clienteJoao -- contaJoao : possui
+contaJoao -- pixJoao_001 : realizou
+pixJoao_001 -- comprovantePixJoao : gera comprovante
+contaJoao -- cartaoVirtualJoao : vincula
+clienteJoao -- emprestimoJoao_001 : contratou
+emprestimoJoao_001 --> bacen : consulta BACEN
+emprestimoJoao_001 --> serasa : consulta Serasa
+clienteJoao -- notificacaoSMSJoao : recebeu
+clienteJoao -- loginJoao : autenticou
+clienteJoao -- historicoAtendimentoJoao : interagiu
+clienteJoao -- relatorioGastosJoao : consulta
+clienteJoao -- historicoCancelamentosJoao : consulta
+clienteJoao -- whatsappBusiness : aderiu
+
+' Relacionamentos Cliente Maria
+
+clienteMaria -- contaMaria : possui
+contaMaria -- pagamentoBoletoMaria_001 : realizou
+pagamentoBoletoMaria_001 -- comprovanteBoletoMaria : gera comprovante
+contaMaria -- cartaoFisicoMaria : vincula
+clienteMaria -- seguroMaria : contratou
+clienteMaria -- notificacaoPushMaria : recebeu
+clienteMaria -- loginMaria : autenticou
+clienteMaria -- tentativaInvalidaMaria : tentativa falha
+clienteMaria -- chatbotMaria : conversou
+clienteMaria -- chatbot : usa motor NLP
+clienteMaria -- orcamentoMensalMaria : definiu orçamento
+clienteMaria -- pacoteServicosMaria : contratou
+clienteMaria -- whatsappBusiness : aderiu
+
+@enduml
