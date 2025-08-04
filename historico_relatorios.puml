@@ -1,0 +1,28 @@
+@startuml historico_relatorios
+
+package "Relatórios e Histórico" {
+  class HistoricoCompra {
+    - data: Date
+    - descricao: String
+    - valor: double
+  }
+
+  class HistoricoCancelamento {
+    - data: Date
+    - motivo: String
+  }
+
+  class HistoricoSuporte {
+    - dataHora: Date
+    - canal: String
+    - mensagem: String
+  }
+
+  ' Relacionamentos
+  Cliente "1" --> "*" HistoricoCompra
+  Cliente "1" --> "*" HistoricoCancelamento
+  Cliente "1" --> "*" HistoricoSuporte
+  Atendente "1" --> "*" HistoricoSuporte
+}
+
+@enduml

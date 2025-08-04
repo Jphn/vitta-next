@@ -1,0 +1,47 @@
+@startuml comunicacao
+
+package "Comunicação" {
+  class Notificacao {
+    - mensagem: String
+    - dataEnvio: Date
+    + enviar()
+  }
+
+  class SMS extends Notificacao {
+    - numeroDestino: String
+  }
+
+  class Email extends Notificacao {
+    - emailDestino: String
+  }
+
+  class Push extends Notificacao {
+    - tokenDispositivo: String
+  }
+
+  class Documento {
+    - nome: String
+    - tipo: String
+    - tamanho: double
+    - conteudo: binary
+    + enviar()
+    + validar()
+  }
+
+  class Chatbot {
+    + processarMensagem()
+  }
+
+  class WhatsAppBusiness {
+    - numero: String
+    + enviarMensagem()
+  }
+
+  ' Relacionamentos
+  Cliente "1" --> "*" Documento
+  Cliente "1" --> "*" Notificacao
+  Documento --> Comprovante
+
+}
+
+@enduml

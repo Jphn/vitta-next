@@ -1,0 +1,43 @@
+@startuml dominio
+
+package "Domínio" {
+  class Cliente {
+    - id: int
+    - nome: String
+    - cpf: String
+    - email: String
+    - telefone: String
+    - dispositivosConfiaveis: List<Dispositivo>
+    + abrirConta()
+    + encerrarConta()
+    + adicionarDispositivo()
+    + visualizarSaldo()
+    + sacarDepositar()
+    + transferirPIX()
+    + pagarContas()
+    + solicitarEmprestimo()
+    + solicitarCartao()
+    + contratarSeguro()
+    + contratarPacote()
+    + visualizarHistoricoCompras()
+    + visualizarHistoricoCancelamentos()
+    + enviarDocumentos()
+    + aderirWhatsApp()
+    + acessarChatbot()
+    + visualizarHistoricoSuporte()
+  }
+
+  class Atendente {
+    - id: int
+    - nome: String
+    + atenderCliente()
+    + acessarHistoricoSuporte()
+  }
+}
+
+Cliente "1" --> "*" Conta
+Cliente "1" --> "*" Comprovante
+Cliente --> Chatbot
+Cliente --> WhatsAppBusiness
+
+@enduml

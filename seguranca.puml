@@ -1,0 +1,40 @@
+@startuml seguranca
+
+package "Autenticação e Segurança" {
+  class Login {
+    - usuario: String
+    - senha: String
+    + autenticar()
+  }
+
+  class Autenticacao2FA {
+    - tipo: String
+    - tentativas: int
+    + enviarCodigo()
+    + validarCodigo()
+    + bloquearTemporariamente()
+  }
+
+  class Dispositivo {
+    - id: int
+    - nome: String
+    - confiavel: boolean
+    + adicionar()
+    + remover()
+  }
+
+  class RegistroAcesso {
+    - dataHora: Date
+    - sucesso: boolean
+    - ip: String
+  }
+
+  ' Relacionamentos
+  Login --> Autenticacao2FA
+  Cliente "1" --> "*" Dispositivo
+  Cliente "1" --> "*" RegistroAcesso
+  Cliente --> Login
+
+}
+
+@enduml
