@@ -1,0 +1,12 @@
+@startuml Diagrama de Classes
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+' Inclui todos os módulos do sistema
+!include dominio.puml
+!include financeiro.puml
+!include seguranca.puml
+!include comunicacao.puml
+!include historico_relatorios.puml
+
+@enduml

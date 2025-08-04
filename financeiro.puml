@@ -1,0 +1,85 @@
+@startuml financeiro
+
+package "Módulo Financeiro" {
+  class Conta {
+    - numero: String
+    - saldo: double
+    - status: String
+    + abrir()
+    + encerrar()
+    + consultarSaldo()
+  }
+
+  class Emprestimo {
+    - valor: double
+    - parcelas: int
+    - taxaJuros: double
+    - status: String
+    + contratar()
+  }
+
+  class Cartao {
+    - numero: String
+    - limite: double
+    - tipo: String
+    - status: String
+    + solicitar()
+  }
+
+  class Seguro {
+    - tipo: String
+    - cobertura: String
+    - premio: double
+    + contratar()
+  }
+
+  class PacoteServico {
+    - nome: String
+    - valor: double
+    - periodicidade: String
+    + contratar()
+  }
+
+  class Transacao {
+    - id: int
+    - data: Date
+    - valor: double
+    - tipo: String
+    - status: String
+    + executar()
+  }
+
+  class Pix {
+    - chaveDestino: String
+    - valor: double
+    + transferir()
+  }
+
+  class Boleto {
+    - codigoBarras: String
+    - valor: double
+    - dataVencimento: Date
+    + pagar()
+  }
+
+  class Comprovante {
+    - id: int
+    - tipo: String
+    - dataEmissao: Date
+    + gerar()
+  }
+
+  ' Relacionamentos
+  Conta "1" --> "*" Transacao
+  Pix --> Comprovante
+  Boleto --> Comprovante
+  Transacao --> Comprovante
+  Cliente "1" --> "*" Emprestimo
+  Cliente "1" --> "*" Cartao
+  Cliente "1" --> "*" Seguro
+  Cliente "1" --> "*" PacoteServico
+  Cliente "1" --> "*" Pix
+  Cliente "1" --> "*" Boleto
+}
+
+@enduml
