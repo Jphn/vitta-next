@@ -1,0 +1,28 @@
+@startuml case17
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nCanal WhatsApp"
+participant Sistema
+participant WhatsApp as "API WhatsApp"
+
+Cliente -> FE: Seleciona "Aderir ao canal no WhatsApp"  
+activate FE
+
+FE -> Sistema: Gera link de confirmação
+activate Sistema
+
+Sistema --> Cliente: Envia link  
+Cliente -> WhatsApp: Acessa link e confirma 
+activate WhatsApp
+
+WhatsApp --> Sistema: Notifica confirmação 
+deactivate WhatsApp
+
+Sistema --> FE: Ativa canal  
+deactivate Sistema
+
+FE --> Cliente: Exibe confirmação
+deactivate FE
+
+@enduml

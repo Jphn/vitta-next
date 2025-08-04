@@ -1,0 +1,32 @@
+@startuml case 03
+skinparam sequenceMessageAlign center
+actor Cliente
+participant "Front-end\nDispositivos Confiáveis" as FE
+participant Sistema
+
+Cliente -> FE: Abre tela de Dispositivos Confiáveis  
+activate FE
+
+FE --> Cliente: Exibe lista de dispositivos 
+deactivate FE
+
+Cliente -> FE: Clica em "Adicionar dispositivo"  
+activate FE
+
+FE -> Sistema: Gera/Envia código de verificação
+activate Sistema  
+
+Sistema --> Cliente: Entrega código (SMS/E-mail)  
+Cliente -> FE: Informa código  
+FE -> Sistema: Valida código  
+alt limite não excedido
+    Sistema --> FE: Confirma adição
+    FE --> Cliente: Dispositivo marcado como confiável
+else limite excedido
+    Sistema --> FE: Informa erro de limite
+    deactivate Sistema
+
+    FE -> Cliente: Sugere remoção de um dispositivo existente
+    deactivate FE
+end
+@enduml

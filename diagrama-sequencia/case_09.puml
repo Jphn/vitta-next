@@ -1,0 +1,30 @@
+@startuml case09
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\Pagar Contas"
+participant Sistema
+participant MFA as "Serviço 2FA"
+
+Cliente -> FE: Seleciona "Pagar Contas"  
+activate FE
+
+FE --> Cliente: Solicita código de barras
+Cliente -> FE: Informa código de barras  
+FE -> Sistema: Busca dados do boleto 
+activate Sistema
+
+Sistema --> FE: Retorna destinatário, valor e vencimento  
+FE --> Cliente: Exibe detalhes  
+Cliente -> FE: Confirma e autentica (2FA)  
+FE -> MFA: Valida fator
+activate MFA
+
+MFA --> FE: Confirma fator 
+deactivate MFA
+FE -> Sistema: Efetua débito  
+Sistema --> FE: Retorna comprovante  
+deactivate Sistema
+FE --> Cliente: Exibe comprovante
+deactivate FE
+@enduml

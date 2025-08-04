@@ -1,0 +1,33 @@
+@startuml case05
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant "Front-end\nAutenticação 2FA" as FE
+participant "Serviço 2FA" as MFA
+
+Cliente -> FE: Inicia 2FA  
+activate FE
+
+FE -> MFA: Solicita envio de OTP  
+activate MFA
+
+MFA --> Cliente: Envia OTP (SMS/App/E-mail)  
+deactivate MFA
+deactivate FE
+
+Cliente -> FE: Informa OTP ou biometria 
+activate FE
+
+FE -> MFA: Valida OTP/biometria 
+activate MFA
+
+alt fator válido
+    MFA --> FE: Autenticação bem-sucedida
+    FE --> Cliente: Confirma autenticação
+else fator inválido
+    MFA --> FE: Retorna erro
+    deactivate MFA
+    FE --> Cliente: Solicita nova tentativa
+    deactivate FE
+end
+@enduml

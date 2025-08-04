@@ -1,0 +1,27 @@
+@startuml case12
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nAdquirir Seguro"
+participant Sistema
+participant Assinatura as "Serviço de\nAssinatura Digital"
+
+Cliente -> FE: Seleciona "Adquirir Seguro"  
+activate FE
+
+FE --> Cliente: Exibe opções de produtos  
+Cliente -> FE: Escolhe produto e cobertura  
+FE -> Sistema: Calcula prêmio e condições  
+activate Sistema
+
+Sistema --> FE: Retorna valores  
+FE --> Cliente: Confirma e assina  
+FE -> Assinatura: Processa assinatura
+activate Assinatura
+
+Assinatura --> FE: Retorna apólice assinada
+deactivate Assinatura
+FE -> Sistema: Registra apólice  
+FE --> Cliente: Envia apólice por e-mail
+deactivate FE
+@enduml

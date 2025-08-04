@@ -1,0 +1,28 @@
+@startuml case16
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nEnviar Documentos"
+participant Sistema
+
+Cliente -> FE: Seleciona "Enviar Documentos"  
+activate FE
+
+FE --> Cliente: Exibe interface de upload
+loop até documentos válidos
+    Cliente -> FE: Anexa arquivo
+    FE -> Sistema: Valida tipo/tamanho
+    activate Sistema
+
+    alt válido
+        Sistema --> FE: Confirma armazenamento
+    else inválido
+        Sistema --> FE: Rejeita e pede novo envio
+        deactivate Sistema
+    end
+end
+
+FE --> Cliente: Exibe confirmação final
+deactivate FE
+
+@enduml

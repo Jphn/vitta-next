@@ -1,0 +1,35 @@
+@startuml case10
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nSolicitar Empréstimo"
+participant Sistema
+participant Assinatura as "Serviço de\nAssinatura Digital"
+
+Cliente -> FE: Seleciona "Solicitar Empréstimo"  
+activate FE
+
+FE --> Cliente: Solicita valor e prazo  
+Cliente -> FE: Informa valor e prazo  
+activate Sistema
+
+FE -> Sistema: Verifica SPC/Serasa e histórico  
+alt sem restrições
+    Sistema --> FE: Aprova preliminar
+    FE --> Cliente: Exibe condições (juros, CET)
+    Cliente -> FE: Confirma e assina
+    FE -> Assinatura: Processa assinatura
+    activate Assinatura
+
+    Assinatura --> FE: Retorna contrato assinado
+    deactivate Assinatura
+
+    FE -> Sistema: Credita valor
+    Sistema --> Cliente: Notifica crédito
+else com restrições
+    Sistema --> FE: Rejeita e informa motivo
+    deactivate Sistema
+    FE --> Cliente: Exibe mensagem
+    deactivate FE
+end
+@enduml

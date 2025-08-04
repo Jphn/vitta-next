@@ -1,0 +1,34 @@
+@startuml case11
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nSolicitar Cartão"
+participant Sistema
+participant Correios
+
+Cliente -> FE: Seleciona "Solicitar Cartão"
+activate FE
+
+FE --> Cliente: Solicita tipo (físico/virtual)  
+Cliente -> FE: Escolhe tipo  
+FE -> Sistema: Verifica elegibilidade  
+activate Sistema
+alt aprovado
+    Sistema --> FE: retorna OK
+    alt virtuals
+        FE --> Cliente: Exibe número virtual
+    else físico
+        FE -> Correios: Solicita emissão e envio
+        activate Correios
+
+        Correios --> FE: Confirma despacho
+        deactivate Correios
+        FE --> Cliente: Informa prazo de entrega
+    end
+else reprovado
+    Sistema --> FE: Rejeita e envia motivo
+    deactivate Sistema
+    FE --> Cliente: Exibe mensagem
+    deactivate FE
+end
+@enduml
