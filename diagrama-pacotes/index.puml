@@ -33,6 +33,7 @@ package "Gerenciamento de Conta" as Account {
 package "Transações e Pagamentos" as Transactions {
   [Saque/Depósito]
   [Transferência PIX]
+  [Transferência TED]
   [Pagamento de Contas]
 }
 

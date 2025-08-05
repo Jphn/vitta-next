@@ -13,6 +13,11 @@ package "Cliente João" {
     saldo = 2500.00
   }
 
+    object tedJoao_001 {
+    numero = "000123-4"
+    valor = 5300.00
+  }
+
   object pixJoao_001 {
     valor = 200.00
     status = "Concluído"

@@ -1,0 +1,17 @@
+@startuml case09
+
+start
+:Cliente seleciona "TED" > "Nova Transferência";
+:Cliente informa número da conta e valor;
+:Verifica perfil e limites;
+:Solicita confirmação 2FA;
+if (2FA aprovado?) then (sim)
+    :Cliente confirma operação;
+    :Envia instrução ao BACEN;
+    :Exibe comprovante;
+    stop
+else (não)
+    :Informa bloqueio;
+    stop
+endif
+@enduml

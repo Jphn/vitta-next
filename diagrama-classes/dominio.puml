@@ -14,6 +14,7 @@ package "Domínio" {
     + visualizarSaldo()
     + sacarDepositar()
     + transferirPIX()
+    + transferirTED()
     + pagarContas()
     + solicitarEmprestimo()
     + solicitarCartao()

@@ -13,6 +13,7 @@ package "Módulo de Compra" {
   usecase "Contratar Pacote"                  as UC_Pacote
   usecase "Visualizar Histórico de Compras"    as UC_HistCompras
   usecase "Pagar via PIX"                     as UC_PIX
+  usecase "Transferir via TED"                     as UC_TED
 
   Cliente --> UC_Emprestimo
   Cliente --> UC_Cartao
@@ -20,6 +21,7 @@ package "Módulo de Compra" {
   Cliente --> UC_Pacote
   Cliente --> UC_HistCompras
   Cliente --> UC_PIX
+  Cliente --> UC_TED
 
   UC_Emprestimo .[#green].> Serasa          : <<include>>
   UC_Emprestimo .[#green].> Bacen           : <<include>>
@@ -32,6 +34,11 @@ package "Módulo de Compra" {
   UC_PIX .[#purple].> Bacen                   : <<include>>
   note right of UC_PIX
     Integração via API PIX do BACEN
+  end note
+
+  UC_TED .[#purple].> Bacen                   : <<include>>
+  note right of UC_TED
+    Integração via API TED do BACEN
   end note
 }
 

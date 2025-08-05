@@ -5,10 +5,15 @@ start
 :Verifica perfil e limites;
 if (Limites ok?) then (sim)
   :Solicita confirmação 2FA;
-  :Cliente confirma operação;
-  :Envia instrução ao PSP PIX;
-  :Exibe comprovante;
-  stop
+  if (2FA aprovado?) then (sim)
+    :Cliente confirma operação;
+    :Envia instrução ao BACEN;
+    :Exibe comprovante;
+    stop
+  else (não)
+    :Informa bloqueio;
+    stop
+  endif
 else (não)
   :Informa bloqueio;
   stop
