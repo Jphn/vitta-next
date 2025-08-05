@@ -22,7 +22,12 @@ package "Core Bancário" as Core {
 package "Gerenciamento de Conta" as Account {
   [Abertura de Conta]
   [Encerramento de Conta]
-  [Visualização de Saldo]
+  [Visualização de Saldo] 
+  package "Gestão Financeira Pessoal" as Management {
+    [Relatório de Gastos]
+    [Orçamento Mensal]
+    [Sugestões de Gastos]
+  }
 }
 
 package "Transações e Pagamentos" as Transactions {
@@ -42,6 +47,7 @@ package "Comunicação" as Communication {
 Account --> Security : <<import>>        
 Account --> Core           
 Transactions --> Core : <<import>>
+Transactions --> Account
 Services --> Account              
 Core --> Communication
 
