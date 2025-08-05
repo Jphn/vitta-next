@@ -1,0 +1,13 @@
+@startuml Sequence_RegistrarDispositivo
+actor Cliente
+participant App
+participant DeviceService
+participant BancoDados
+Cliente -> App: Selecionar "Registrar dispositivo"
+Cliente -> App: preencher dados do dispositivo
+App -> DeviceService: verifyAndRegister(deviceInfo, código)
+DeviceService -> BancoDados: saveTrustedDevice()
+BancoDados --> DeviceService: confirmação
+DeviceService --> App: registrationSuccess()
+App --> Cliente: "Dispositivo registrado com sucesso"
+@enduml

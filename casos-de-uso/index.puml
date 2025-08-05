@@ -47,13 +47,25 @@ package "Autenticação e Segurança" {
   usecase "Login"                           as UC_Login
   usecase "Autenticação 2FA"               as UC_2FA
   usecase "Registrar Tentativa de Acesso"   as UC_RegistroAcesso
+  usecase "Registrar dispositivo confiável" as UC_DispConf
 
+  Cliente --> UC_DispConf
   Cliente --> UC_Login
   UC_Login .[#blue].> UC_2FA                 : <<include>>
   UC_Login .[#red].> UC_RegistroAcesso       : <<extend>>
   note right of UC_RegistroAcesso
     Regra de Negócio: Alerta em tentativas
     de acesso mal-sucedidas
+  end note
+}
+
+package "Gerenciamento" {
+  usecase "Encerrar conta" as UC_Encerrar
+
+  Cliente --> UC_Encerrar
+  note right of UC_Encerrar
+    Regra de Negócio: O usuário não 
+    pode ter pendências com o banco
   end note
 }
 
