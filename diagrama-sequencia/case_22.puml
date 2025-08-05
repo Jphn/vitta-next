@@ -1,0 +1,12 @@
+@startuml Sequence_OrcamentoMensal
+actor Cliente
+participant App
+participant FinanceService
+participant MongoDB
+Cliente -> App: Inserir orçamentos por categoria
+App -> FinanceService: POST /orcamento
+FinanceService -> MongoDB: Salvar orçamentos
+MongoDB --> FinanceService: Confirmação
+FinanceService --> App: Status OK
+App --> Cliente: "Orçamento salvo com sucesso"
+@enduml

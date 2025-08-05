@@ -1,0 +1,12 @@
+@startuml Sequence_Sugestoes
+actor Cliente
+participant App
+participant FinanceService
+participant MongoDB
+Cliente -> App: Acessar "Sugestões"
+App -> FinanceService: GET /sugestoes
+FinanceService -> MongoDB: Buscar histórico
+MongoDB --> FinanceService: Dados históricos
+FinanceService --> App: Lista de sugestões
+App --> Cliente: Mostrar sugestões personalizadas
+@enduml
