@@ -1,0 +1,43 @@
+@startuml DiagramaDeImplantacao
+!define NODE node
+
+node "Cluster AWS EKS" {
+  node "Pod de Autenticação" {
+    artifact "auth-service:1.0" <<container Docker>>
+  }
+  node "Pod de Transações" {
+    artifact "transaction-service:1.0" <<container Docker>>
+  }
+  node "Pod de Comunicação" {
+    artifact "communication-service:1.0" <<container Docker>>
+  }
+  node "Pod Financeiro" {
+    artifact "finance-service:1.0" <<container Docker>>
+  }
+}
+
+node "Balanceador de Carga" <<dispositivo>>
+
+node "RDS PostgreSQL" <<banco de dados>>
+node "MongoDB Atlas" <<banco de dados>>
+
+node "Serviços Externos" {
+  [API BACEN PIX]
+  [API Serasa]
+  [Gateway de SMS]
+}
+
+' Conexões de rede
+[Balanceador de Carga] --> [Pod de Autenticação]
+[Balanceador de Carga] --> [Pod de Transações]
+[Balanceador de Carga] --> [Pod de Comunicação]
+[Balanceador de Carga] --> [Pod Financeiro]
+
+[Pod de Autenticação] --> [RDS PostgreSQL]      : JDBC/TCP
+[Pod de Transações]    --> [MongoDB Atlas]      : TCP
+[Pod Financeiro]       --> [MongoDB Atlas]      : TCP
+
+[Pod de Transações]    --> [API BACEN PIX]      : HTTPS
+[Pod de Autenticação]  --> [API Serasa]         : HTTPS
+[Pod de Comunicação]   --> [Gateway de SMS]      : HTTPS
+@enduml
