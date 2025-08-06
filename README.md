@@ -28,6 +28,10 @@ Assim como dito em sala durante a apresentação a nossa equipe utilizou o proje
 
 O documento de requisitos também está disponível neste repositório e foi escrito em MarkDown com objetivo de facilitar o versionamento e inclusão direta no repositório. O arquivo está salvo como `documento_de_requisitos.md`.
 
+### Documento de Casos de Uso
+
+O `casos_de_uso.md` é um arquivo de extensão aos nossos casos, com descrições mais detalhadas de cada um, conforme o modelo que foi apresentado em sala de aula.
+
 ### Diagramas
 
 Assim como informado acima, todos os diagramas estão disponíveis em pastas e nomeados de forma a facilitar suas identificações.
