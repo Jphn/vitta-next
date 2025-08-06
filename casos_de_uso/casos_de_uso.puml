@@ -5,44 +5,55 @@ skinparam packageStyle rectangle
 actor Cliente
 actor Atendente
 
-' Pacote: Módulo de Compra
-package "Módulo de Compra" {
-  usecase "Contratar Empréstimo"             as UC_Emprestimo
-  usecase "Solicitar Cartão"                  as UC_Cartao
-  usecase "Contratar Seguro"                  as UC_Seguro
-  usecase "Contratar Pacote"                  as UC_Pacote
-  usecase "Visualizar Histórico de Compras"    as UC_HistCompras
-  usecase "Pagar via PIX"                     as UC_PIX
+package "Transferências" {
+  usecase "Pagar via PIX"                     as UC_PIX 
   usecase "Transferir via TED"                     as UC_TED
 
-  Cliente --> UC_Emprestimo
-  Cliente --> UC_Cartao
-  Cliente --> UC_Seguro
-  Cliente --> UC_Pacote
-  Cliente --> UC_HistCompras
-  Cliente --> UC_PIX
   Cliente --> UC_TED
+  Cliente --> UC_PIX
 
-  UC_Emprestimo .[#green].> Serasa          : <<include>>
-  UC_Emprestimo .[#green].> Bacen           : <<include>>
-  note right of UC_Emprestimo
-    Regras de Negócio:
-    - Cliente sem restrições SPC/Serasa
-    - Consulta obrigatória ao BACEN
-  end note
-
-  UC_PIX .[#purple].> Bacen                   : <<include>>
+  UC_PIX .[#purple].> BACEN                   : <<include>>
   note right of UC_PIX
     Integração via API PIX do BACEN
   end note
 
-  UC_TED .[#purple].> Bacen                   : <<include>>
+  UC_TED .[#purple].> BACEN                   : <<include>>
   note right of UC_TED
     Integração via API TED do BACEN
   end note
 }
 
-' Pacote: Autenticação e Segurança
+package "Módulo de Compra" {
+  usecase "Contratar Empréstimo"             as UC_Emprestimo
+  usecase "Solicitar Cartão"                  as UC_Cartao
+  usecase "Ativar Cartão" as UC_Ativar
+  usecase "Contratar Seguro"                  as UC_Seguro
+  usecase "Contratar Pacote"                  as UC_Pacote
+  usecase "Visualizar Histórico de Compras"    as UC_HistCompras
+  usecase "Pagar boleto"    as UC_Boleto
+
+  Cliente --> UC_Emprestimo
+  Cliente --> UC_Boleto
+  Cliente --> UC_Cartao
+  note right of UC_Cartao
+    Regras de Negócio: Cartões virtuais
+    têm validade de somente 12 meses
+  end note
+
+  Cliente --> UC_Ativar
+  Cliente --> UC_Seguro
+  Cliente --> UC_Pacote
+  Cliente --> UC_HistCompras
+
+  UC_Emprestimo .[#green].> Serasa          : <<include>>
+  UC_Emprestimo .[#green].> BACEN           : <<include>>
+  note right of UC_Emprestimo
+    Regras de Negócio:
+    - Cliente sem restrições SPC/Serasa
+    - Consulta obrigatória ao BACEN
+  end note
+}
+
 package "Autenticação e Segurança" {
   usecase "Login"                           as UC_Login
   usecase "Autenticação 2FA"               as UC_2FA
@@ -52,7 +63,7 @@ package "Autenticação e Segurança" {
   Cliente --> UC_DispConf
   Cliente --> UC_Login
   UC_Login .[#blue].> UC_2FA                 : <<include>>
-  UC_Login .[#red].> UC_RegistroAcesso       : <<extend>>
+  UC_Login <.[#red]. UC_RegistroAcesso       : <<extend>>
   note right of UC_RegistroAcesso
     Regra de Negócio: Alerta em tentativas
     de acesso mal-sucedidas
@@ -60,8 +71,10 @@ package "Autenticação e Segurança" {
 }
 
 package "Gerenciamento" {
+  usecase "Cadastrar conta" as UC_Cadastrar
   usecase "Encerrar conta" as UC_Encerrar
 
+  Cliente --> UC_Cadastrar
   Cliente --> UC_Encerrar
   note right of UC_Encerrar
     Regra de Negócio: O usuário não 
@@ -69,7 +82,6 @@ package "Gerenciamento" {
   end note
 }
 
-' Pacote: Módulo de Comunicação
 package "Módulo de Comunicação" {
   usecase "Enviar Notificação"              as UC_Notif
   usecase "Notificação Push"                as UC_Push
@@ -85,21 +97,19 @@ package "Módulo de Comunicação" {
   Cliente --> UC_HistAtend
   Cliente --> UC_EnvDoc
 
-  UC_Notif ..> UC_Push                       : <<extend>>
-  UC_Notif ..> UC_SMS                        : <<extend>>
-  UC_Notif ..> UC_Email                      : <<extend>>
+  UC_Notif <.. UC_Push                       : <<extend>>
+  UC_Notif <.. UC_SMS                        : <<extend>>
+  UC_Notif <.. UC_Email                      : <<extend>>
 
   Atendente --> UC_HistAtend
 }
 
-' Pacote: Gestão Financeira Pessoal
 package "Gestão Financeira Pessoal" {
   usecase "Visualizar Relatório de Gastos"   as UC_RelGastos
   usecase "Definir Orçamento Mensal"         as UC_OrcMensal
   usecase "Receber Sugestões de Gastos"      as UC_Sugestao
 
   Cliente --> UC_RelGastos
-  Cliente --> UC_OrcMensal
   Cliente --> UC_Sugestao
 
   note right of UC_Sugestao
