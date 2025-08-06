@@ -1,0 +1,19 @@
+@startuml Ativar_Cartao
+start
+:Cliente acessa seção "Cartões";
+:App exibe detalhes do cartão e botão "Ativar";
+if (Cliente confirma ativação?) then (sim)
+  :App envia requisição ao CardService;
+  :CardService valida status do cartão;
+  if (Cartão pronto para ativar?) then (sim)
+    :CardService atualiza status para "Ativo" no DB;
+    :CardService notifica sistema de autorizações;
+    :App exibe mensagem "Cartão ativado com sucesso";
+  else (não)
+    :App exibe erro ou instruções adicionais;
+  endif
+else (não)
+  :App cancela operação;
+endif
+stop
+@enduml

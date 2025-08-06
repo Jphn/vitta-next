@@ -1,0 +1,14 @@
+@startuml Dispositivo_Conf
+start
+:Cliente abre "Dispositivos Confiáveis";
+:Cliente seleciona "Adicionar dispositivo";
+:Envia código de verificação;
+:Cliente insere código recebido;
+if (Até 5 dispositivos?) then (sim)
+  :Sistema marca dispositivo como confiável;
+  stop
+else (não)
+  :Informa limite atingido e sugere remoção de dispositivo;
+  stop
+endif
+@enduml

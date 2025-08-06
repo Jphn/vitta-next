@@ -1,0 +1,16 @@
+@startuml Enviar_Doc
+start
+:Cliente seleciona "Enviar Documentos";
+
+repeat
+  :Cliente anexa arquivos;
+  :Valida tipo/tamanho;
+  if (Documentos válidos?) then (sim)
+    :Armazena documentos;
+    :Confirma recebimento;
+    stop
+  else (não)
+    :Rejeita e solicita novo envio;
+  endif
+repeat while (Documentos inválidos?)
+@enduml

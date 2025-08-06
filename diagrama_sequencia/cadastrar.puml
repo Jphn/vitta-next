@@ -1,0 +1,30 @@
+@startuml Cadastrar
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant "Front-end\nAbrir Conta" as FE
+participant Sistema
+
+Cliente -> FE: Seleciona "Abrir Conta"
+activate FE 
+
+FE --> Cliente: Exibe formulário de cadastro
+deactivate FE
+
+Cliente -> FE: Envia dados pessoais e documentos
+activate FE
+
+FE -> Sistema: Valida dados e documentos
+activate Sistema
+
+alt documentos válidos
+    Sistema --> FE: Confirma validação
+    FE --> Cliente: Mostra mensagem de boas-vindas
+else documentos inválidos
+    Sistema --> FE: Rejeita e solicita reenvio
+    deactivate Sistema
+
+    FE --> Cliente: Mostra erro e pede novo envio
+    deactivate FE
+end
+@enduml

@@ -1,0 +1,22 @@
+@startuml Login
+start
+:Cliente abre o app;
+:App exibe tela de login;
+:Cliente insere e-mail/CPF e senha;
+:App envia credenciais ao AuthService;
+if (Credenciais válidas?) then (sim)
+  :AuthService retorna token temporário;
+  :App solicita código 2FA ao TwoFAService;
+  :Cliente insere código recebido;
+  if (Código 2FA válido?) then (sim)
+    :TwoFAService confirma autenticação;
+    :App armazena token JWT;
+    :App exibe dashboard inicial;
+  else (não)
+    :App exibe erro de 2FA;
+  endif
+else (não)
+  :App exibe mensagem de credenciais inválidas;
+endif
+stop
+@enduml

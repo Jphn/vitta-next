@@ -1,0 +1,8 @@
+@startuml WhatsApp
+start
+:Cliente seleciona "Aderir ao WhatsApp";
+:Envia link de confirmação;
+:Cliente confirma entrada;
+:Ativa canal para notificações;
+stop
+@enduml

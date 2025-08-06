@@ -1,0 +1,25 @@
+@startuml Chatbot
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant Chatbot as "Chatbot"
+participant Sistema
+
+Cliente -> Chatbot: Envia mensagem  
+activate Chatbot
+
+Chatbot -> Sistema: Consulta FAQ/Regra de resposta  
+activate Sistema
+
+alt resposta encontrada
+    Sistema --> Chatbot: Retorna resposta
+    Chatbot --> Cliente: Exibe resposta
+else não encontrada
+    Chatbot -> Sistema: Encaminha para atendente
+    Sistema --> Chatbot: Retorna contato do atendente
+    deactivate Sistema
+
+    Chatbot --> Cliente: Exibe resposta
+    deactivate Chatbot
+end
+@enduml

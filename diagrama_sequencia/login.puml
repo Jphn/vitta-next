@@ -1,0 +1,23 @@
+@startuml Login
+actor Cliente
+participant App
+participant AuthService
+participant TwoFAService
+
+Cliente -> App: abrir app e ver tela de login
+App -> Cliente: exibir campos de e-mail/CPF e senha
+Cliente -> App: enviar credenciais
+App -> AuthService: POST /login {user, pass}
+AuthService --> App: {token_temp}
+App -> TwoFAService: enviar token_temp e solicitar 2FA
+TwoFAService --> Cliente: enviar código via SMS/app
+Cliente -> App: inserir código 2FA
+App -> TwoFAService: validar código 2FA
+TwoFAService --> App: confirmação ou erro
+alt confirmação
+  App -> App: armazenar token JWT
+  App --> Cliente: redirect para dashboard
+else erro
+  App --> Cliente: exibir mensagem de erro 2FA
+end
+@enduml

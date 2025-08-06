@@ -1,0 +1,43 @@
+@startuml Saque_Deposito
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant "Front-end (Caixa Eletrônico)" as FE
+participant Sistema
+participant "Serviço 2FA" as MFA
+
+Cliente -> FE: Seleciona Saque/Depósito e informa valor  
+activate FE
+
+FE -> Sistema: Verifica limite diário  
+activate Sistema
+
+alt dentro do limite
+    Sistema --> FE: retorna OK
+    deactivate Sistema
+
+    FE --> Cliente: Solicita confirmação 2FA
+    deactivate FE
+
+    Cliente -> FE: Autoriza operação (OTP/biometria)
+    activate FE
+
+    FE -> MFA: Valida fator
+    activate MFA
+
+    MFA --> FE: Confirma fator
+    deactivate MFA
+
+    FE -> Sistema: Executa transação
+    activate Sistema
+    
+    Sistema --> FE: Retorna comprovante
+    deactivate Sistema
+
+    FE --> Cliente: Exibe comprovante
+else acima do limite
+    Sistema --> FE: Retorna erro de limite
+    FE --> Cliente: Exibe sugestão de exceção
+    deactivate FE
+end
+@enduml

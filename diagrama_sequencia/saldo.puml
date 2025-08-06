@@ -1,0 +1,20 @@
+@startuml Saldo
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant "Front-end\nVisualizar saldo" as FE
+participant "Core Bancário" as CB
+
+Cliente -> FE: Seleciona "Visualizar Saldo"
+activate FE
+
+FE -> CB: Consulta saldo
+activate CB
+
+CB --> FE: Retorna valor disponível
+deactivate CB
+
+FE --> Cliente: Exibe saldo atual
+deactivate FE
+
+@enduml

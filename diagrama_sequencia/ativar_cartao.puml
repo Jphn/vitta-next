@@ -1,0 +1,23 @@
+@startuml Ativar_Cartao
+actor Cliente
+participant App
+participant CardService
+participant BancoDados
+participant AuthService
+
+Cliente -> App: Selecionar cartão e tocar "Ativar"
+App -> AuthService: validarToken()
+AuthService --> App: token OK
+App -> CardService: activateCard(cardId)
+CardService -> BancoDados: checkCardStatus(cardId)
+BancoDados --> CardService: status (Emitido/Pronto)
+alt pronto para ativar
+  CardService -> BancoDados: updateStatus(cardId, "Ativo")
+  BancoDados --> CardService: confirmação
+  CardService -> App: success()
+  App --> Cliente: "Cartão ativado com sucesso"
+else não pronto
+  CardService -> App: failure(reason)
+  App --> Cliente: exibe motivo de falha
+end
+@enduml

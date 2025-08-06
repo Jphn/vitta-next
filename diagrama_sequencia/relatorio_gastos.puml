@@ -1,0 +1,12 @@
+@startuml Relatorio_Gastos
+actor Cliente
+participant App
+participant FinanceService
+participant MongoDB
+Cliente -> App: Abrir aba "Relatórios"
+App -> FinanceService: GET /gastos
+FinanceService -> MongoDB: Buscar despesas
+MongoDB --> FinanceService: Lista de gastos
+FinanceService --> App: JSON com resumo por categoria
+App --> Cliente: Exibe gráfico e lista
+@enduml

@@ -1,7 +1,0 @@
-@startuml case14
-start
-:Cliente seleciona "Histórico de Compras";
-:Recupera lista de compras;
-:Exibe e permite filtros;
-stop
-@enduml

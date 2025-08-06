@@ -1,0 +1,11 @@
+@startuml Relatorio_Gastos
+start
+:Cliente acessa aba "Relatórios" no app;
+:App envia requisição ao FinanceService;
+:FinanceService valida token do cliente;
+:Consulta dados no MongoDB;
+:Processa e agrega por categoria;
+:Retorna gráfico e lista de gastos;
+:App exibe relatório na tela;
+stop
+@enduml

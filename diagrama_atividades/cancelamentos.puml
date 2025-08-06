@@ -1,0 +1,7 @@
+@startuml Cancelamentos
+start
+:Cliente seleciona "Histórico de Cancelamentos";
+:Recupera lista de cancelamentos;
+:Exibe e permite filtros;
+stop
+@enduml

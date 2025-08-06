@@ -1,0 +1,7 @@
+@startuml Historico_Atend
+start
+:Cliente seleciona "Histórico de Suporte";
+:Recupera interações (chatbot/atendente);
+:Exibe registro e filtros;
+stop
+@enduml

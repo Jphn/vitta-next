@@ -1,0 +1,18 @@
+@startuml Cadastrar
+start
+:Cliente seleciona "Abrir Conta";
+:Cliente preenche dados pessoais;
+
+repeat
+  :Cliente anexa documentos;
+  if (Documentos válidos?) then (sim)
+    break
+  else (não)
+    :Solicita reenvio de documentos;
+  endif
+repeat while (Documentos não válidos?)
+
+:Gera conta provisória;
+:Envia e-mail/SMS de boas-vindas;
+stop
+@enduml

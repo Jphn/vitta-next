@@ -1,0 +1,10 @@
+@startuml Orcamento_Mensal
+start
+:Cliente acessa aba "Orçamento";
+:Define valores por categoria;
+:App envia dados para FinanceService;
+:FinanceService valida dados;
+:Registra orçamento no MongoDB;
+:Confirmação exibida ao cliente;
+stop
+@enduml

@@ -1,0 +1,15 @@
+@startuml Emprestimo
+start
+:Cliente seleciona "Solicitar Empréstimo";
+:Cliente informa valor e prazo;
+:Verifica SPC/Serasa e histórico;
+if (Sem pendências?) then (sim)
+  :Apresenta condições (juros, CET);
+  :Cliente confirma e assina digitalmente;
+  :Credita valor na conta;
+  stop
+else (não)
+  :Informa restrição e encerra;
+  stop
+endif
+@enduml

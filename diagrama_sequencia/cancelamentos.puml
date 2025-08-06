@@ -1,0 +1,20 @@
+@startuml Cancelamentos
+skinparam sequenceMessageAlign center
+
+actor Cliente
+participant FE as "Front-end\nHistórico de Cancelamentos"
+participant Sistema
+
+Cliente -> FE: Acessa "Histórico de Cancelamentos"  
+activate FE
+
+FE -> Sistema: Solicita registros de cancelamento
+activate Sistema
+
+Sistema --> FE: Retorna lista  
+deactivate Sistema
+
+FE --> Cliente: Exibe histórico com filtros
+deactivate FE
+
+@enduml

@@ -1,7 +1,0 @@
-@startuml case06
-start
-:Cliente seleciona "Visualizar Saldo";
-:Consulta saldo no core bancário;
-:Exibe saldo ao cliente;
-stop
-@enduml

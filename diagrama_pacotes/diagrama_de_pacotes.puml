@@ -1,0 +1,55 @@
+@startuml Pacotes
+
+package "Segurança" as Security {
+  [Autenticação\n(Login, 2FA)]
+  [Gestão de\nDispositivos Confiáveis]
+  [Serviço de Assinatura Digital]
+}
+
+package "Serviços Financeiros" as Services {
+  [Solicitação de Empréstimo]
+  [Contratação de Pacotes\nde Serviços]
+  [Solicitação de Cartão]
+  [Emissão de Seguro]
+}
+
+package "Core Bancário" as Core {
+  [Core Bancário]
+  [PSP PIX]
+  [SPC/Serasa]
+}
+
+package "Gerenciamento de Conta" as Account {
+  [Abertura de Conta]
+  [Encerramento de Conta]
+  [Visualização de Saldo] 
+  package "Gestão Financeira Pessoal" as Management {
+    [Relatório de Gastos]
+    [Orçamento Mensal]
+    [Sugestões de Gastos]
+  }
+}
+
+package "Transações e Pagamentos" as Transactions {
+  [Saque/Depósito]
+  [Transferência PIX]
+  [Transferência TED]
+  [Pagamento de Contas]
+}
+
+package "Comunicação" as Communication {
+  [Envio de Documentos]
+  [Chatbot e Suporte]
+  [Histórico de Suporte]
+  [Notificações]
+  [Canal - WhatsApp]
+}
+
+Account --> Security : <<import>>        
+Account --> Core           
+Transactions --> Core : <<import>>
+Transactions --> Account
+Services --> Account              
+Core --> Communication
+
+@enduml

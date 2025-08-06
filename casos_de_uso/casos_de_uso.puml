@@ -1,4 +1,4 @@
-@startuml Casos de Uso
+@startuml Casos_De_Uso
 left to right direction
 skinparam packageStyle rectangle
 

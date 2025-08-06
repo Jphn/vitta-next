@@ -1,0 +1,37 @@
+@startuml Diagrama_De_Componentes
+!define RECTANGLE class
+skinparam componentStyle rectangle
+
+package "Gateway e Integrações" {
+  [API Gateway] <<componente>>
+  [Integração PIX (BACEN)] <<componente>>
+  [Integração Serasa] <<componente>>
+  [Gateway de SMS] <<componente>>
+}
+
+package "Serviços" {
+  [Serviço de Autenticação] <<componente>>
+  [Serviço de Transações] <<componente>>
+  [Serviço de Comunicação] <<componente>>
+  [Serviço Financeiro] <<componente>>
+}
+
+package "Dados" {
+  [Banco de Dados PostgreSQL] <<banco de dados>>
+  [MongoDB] <<banco de dados>>
+}
+
+' Dependências de comunicação
+[API Gateway] --> [Serviço de Autenticação] : REST
+[API Gateway] --> [Serviço de Transações]  : REST
+[API Gateway] --> [Serviço de Comunicação]: REST
+[API Gateway] --> [Serviço Financeiro]    : REST
+[Serviço de Transações] --> [Integração PIX (BACEN)] : HTTPS
+[Serviço de Autenticação] --> [Integração Serasa]    : HTTPS
+[Serviço de Comunicação] --> [Gateway de SMS]        : HTTPS
+
+' Persistência de dados
+[Serviço de Autenticação] --> [Banco de Dados PostgreSQL]
+[Serviço de Transações]    --> [MongoDB]
+[Serviço Financeiro]       --> [MongoDB]
+@enduml
